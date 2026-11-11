@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movimientos · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="app-header"></header>
+  <main>
+    <div class="contenedor">
+      <div class="cabecera-pagina">
+        <div>
+          <h1>📋 Movimientos</h1>
+          <p class="muted">Historial de entradas y salidas con hora del servidor y operador.</p>
+        </div>
+        <div class="tabs" style="margin:0" data-solo-admin>
+          <button type="button" class="activo" data-vista="movimientos">Movimientos</button>
+          <button type="button" data-vista="rechazos">Intentos rechazados</button>
+        </div>
+      </div>
+
+      <section class="tarjeta">
+        <form id="filtros" class="filtros">
+          <div class="solo-mov"><label for="f-vehiculo">Vehículo</label><select id="f-vehiculo"><option value="">Todos</option></select></div>
+          <div class="solo-mov"><label for="f-almacen">Almacén</label><select id="f-almacen"><option value="">Todos</option></select></div>
+          <div class="solo-mov"><label for="f-tipo">Tipo</label>
+            <select id="f-tipo"><option value="">Todos</option><option value="entrada">Entrada</option><option value="salida">Salida</option></select></div>
+          <div class="solo-mov"><label for="f-operador">Operador</label><select id="f-operador"><option value="">Todos</option></select></div>
+          <div><label for="f-desde">Desde</label><input id="f-desde" type="date"></div>
+          <div><label for="f-hasta">Hasta</label><input id="f-hasta" type="date"></div>
+          <div class="acciones">
+            <button class="btn" type="submit">🔎 Filtrar</button>
+            <button class="btn secundario" type="button" id="btn-limpiar">Limpiar</button>
+            <button class="btn secundario" type="button" id="btn-csv">⬇️ Excel (CSV)</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="tarjeta">
+        <div class="tarjeta-titulo">
+          <h2 id="titulo-tabla">Movimientos</h2>
+          <span class="muted small" id="total"></span>
+        </div>
+        <div class="tabla-wrap">
+          <table>
+            <thead id="cabecera"></thead>
+            <tbody id="tabla"><tr><td class="vacio">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="acciones" style="justify-content:space-between;margin-top:.8rem;align-items:center">
+          <button class="btn secundario chico" id="btn-anterior">← Anterior</button>
+          <span class="muted small" id="pagina"></span>
+          <button class="btn secundario chico" id="btn-siguiente">Siguiente →</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/movimientos.js"></script>
+</body>
+</html>

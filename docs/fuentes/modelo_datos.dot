@@ -1,0 +1,100 @@
+digraph ER {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.4, nodesep=0.6, ranksep=1.1,
+         label="Modelo de datos · Sistema de Trazabilidad de Flotas (Supabase / PostgreSQL)", labelloc=t, fontsize=20];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=10, color="#5b6676", arrowhead=crow, arrowtail=tee, dir=both];
+
+  users [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#5b6676"><font color="white"><b>auth.users</b> (Supabase Auth)</font></td></tr>
+    <tr><td align="left">🔑 id : uuid</td></tr>
+    <tr><td align="left">email : text</td></tr>
+    <tr><td align="left">encrypted_password, ...</td></tr>
+  </table>>];
+
+  perfiles [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#0b1f3a"><font color="white"><b>perfiles</b></font></td></tr>
+    <tr><td align="left">🔑 id : uuid (FK auth.users)</td></tr>
+    <tr><td align="left">email : text</td></tr>
+    <tr><td align="left">nombre : text</td></tr>
+    <tr><td align="left">rol : 'admin' | 'operador'</td></tr>
+    <tr><td align="left">activo : boolean</td></tr>
+    <tr><td align="left">creado_en : timestamptz</td></tr>
+  </table>>];
+
+  vehiculos [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#1b4380"><font color="white"><b>vehiculos</b></font></td></tr>
+    <tr><td align="left">🔑 id : uuid</td></tr>
+    <tr><td align="left">placa : text UNIQUE (ABC-123)</td></tr>
+    <tr><td align="left">marca, modelo : text</td></tr>
+    <tr><td align="left">anio : int</td></tr>
+    <tr><td align="left">estado : disponible | en_ruta | mantenimiento | inactivo</td></tr>
+    <tr><td align="left">qr_token : uuid UNIQUE</td></tr>
+    <tr><td align="left">creado_por : uuid (FK perfiles)</td></tr>
+    <tr><td align="left">creado_en : timestamptz</td></tr>
+  </table>>];
+
+  almacenes [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#f28c28"><b>almacenes</b></td></tr>
+    <tr><td align="left">🔑 id : uuid</td></tr>
+    <tr><td align="left">nombre : text UNIQUE</td></tr>
+    <tr><td align="left">direccion : text</td></tr>
+    <tr><td align="left">lat, lng : double precision</td></tr>
+    <tr><td align="left">radio_m : int (20–5000)</td></tr>
+    <tr><td align="left">activo : boolean</td></tr>
+    <tr><td align="left">creado_en : timestamptz</td></tr>
+  </table>>];
+
+  movimientos [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#16a34a"><font color="white"><b>movimientos</b></font></td></tr>
+    <tr><td align="left">🔑 id : bigint</td></tr>
+    <tr><td align="left">vehiculo_id : uuid (FK)</td></tr>
+    <tr><td align="left">almacen_id : uuid (FK)</td></tr>
+    <tr><td align="left">operador_id : uuid (FK)</td></tr>
+    <tr><td align="left">tipo : 'entrada' | 'salida'</td></tr>
+    <tr><td align="left">registrado_en : timestamptz (hora servidor)</td></tr>
+    <tr><td align="left">lat, lng, precision_m</td></tr>
+    <tr><td align="left">distancia_m (calculada en servidor)</td></tr>
+    <tr><td align="left">direccion (Nominatim), observacion</td></tr>
+  </table>>];
+
+  rechazos [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#dc2626"><font color="white"><b>escaneos_rechazados</b></font></td></tr>
+    <tr><td align="left">🔑 id : bigint</td></tr>
+    <tr><td align="left">vehiculo_id, almacen_id, operador_id</td></tr>
+    <tr><td align="left">tipo, lat, lng, precision_m, distancia_m</td></tr>
+    <tr><td align="left">motivo : text</td></tr>
+    <tr><td align="left">creado_en : timestamptz</td></tr>
+  </table>>];
+
+  parametros [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5">
+    <tr><td bgcolor="#ca8a04"><font color="white"><b>parametros</b> (1 fila)</font></td></tr>
+    <tr><td align="left">precision_max_m : int</td></tr>
+    <tr><td align="left">intervalo_minimo_seg : int</td></tr>
+  </table>>];
+
+  vistas [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#9aa5b5" style="dashed">
+    <tr><td bgcolor="#e6eef9"><b>Vistas</b></td></tr>
+    <tr><td align="left">v_movimientos (movimientos + placa, almacén, operador)</td></tr>
+    <tr><td align="left">v_ultimo_punto (último punto de control por vehículo)</td></tr>
+    <tr><td align="left">v_rechazos (auditoría legible)</td></tr>
+  </table>>];
+
+  users -> perfiles [label="1 : 1", arrowhead=tee];
+  perfiles -> movimientos [label="registra"];
+  vehiculos -> movimientos [label="1 : N"];
+  almacenes -> movimientos [label="1 : N"];
+  vehiculos -> rechazos [style=dashed];
+  almacenes -> rechazos [style=dashed];
+  perfiles -> rechazos [style=dashed];
+  perfiles -> vehiculos [label="creado_por", style=dashed];
+  movimientos -> vistas [style=dotted, arrowhead=none, arrowtail=none];
+  parametros -> vistas [style=invis];
+}

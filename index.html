@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <main class="login-pagina">
+    <section class="login-lado">
+      <h1>🚛 Sistema de Gestión y Trazabilidad de Flotas Logísticas</h1>
+      <p>Controle las llegadas y salidas de sus vehículos en cada almacén.</p>
+      <ul>
+        <li>Cada vehículo tiene un <b>código QR único</b>.</li>
+        <li>El operador escanea el QR con la cámara del celular.</li>
+        <li>Se obtiene la <b>ubicación GPS</b> y la dirección aproximada.</li>
+        <li>Se valida que esté dentro de la <b>geocerca</b> del almacén.</li>
+        <li>Se guarda el movimiento con la <b>hora del servidor</b> y el operador.</li>
+      </ul>
+    </section>
+
+    <section class="login-form">
+      <div class="login-caja" id="caja">
+        <div class="tabs">
+          <button type="button" class="activo" data-tab="ingresar">Ingresar</button>
+          <button type="button" data-tab="registro">Crear cuenta</button>
+        </div>
+
+        <div id="mensaje"></div>
+
+        <form id="form-ingresar" class="tarjeta">
+          <h2>Iniciar sesión</h2>
+          <div style="margin-bottom:.8rem">
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email" autocomplete="email" required>
+          </div>
+          <div style="margin-bottom:1rem">
+            <label for="clave">Contraseña</label>
+            <input id="clave" type="password" autocomplete="current-password" required>
+          </div>
+          <button class="btn bloque grande" type="submit">Ingresar</button>
+        </form>
+
+        <form id="form-registro" class="tarjeta oculto">
+          <h2>Crear cuenta</h2>
+          <p class="muted small">El <b>primer usuario</b> que se registre será <b>administrador</b>. Los siguientes serán <b>operadores</b> (el administrador puede cambiar su rol).</p>
+          <div style="margin-bottom:.8rem">
+            <label for="r-nombre">Nombre completo</label>
+            <input id="r-nombre" type="text" required minlength="3" maxlength="80">
+          </div>
+          <div style="margin-bottom:.8rem">
+            <label for="r-email">Correo electrónico</label>
+            <input id="r-email" type="email" autocomplete="email" required>
+          </div>
+          <div style="margin-bottom:1rem">
+            <label for="r-clave">Contraseña (mínimo 6 caracteres)</label>
+            <input id="r-clave" type="password" autocomplete="new-password" required minlength="6">
+          </div>
+          <button class="btn bloque grande naranja" type="submit">Crear cuenta</button>
+        </form>
+        <p class="pie">Proyecto integrador · Aplicaciones Web · Grupo 3</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/login.js"></script>
+</body>
+</html>

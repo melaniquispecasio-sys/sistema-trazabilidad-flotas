@@ -1,0 +1,49 @@
+digraph Arquitectura {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.4, nodesep=0.45, ranksep=0.9, compound=true,
+         label="Arquitectura · Sistema Web de Gestión y Trazabilidad de Flotas Logísticas", labelloc=t, fontsize=20];
+  node  [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#ffffff", color="#9aa5b5", margin="0.18,0.1"];
+  edge  [fontname="Helvetica", fontsize=9, color="#5b6676"];
+
+  subgraph cluster_usuario {
+    label="Dispositivo del usuario (celular / PC)"; style="rounded,filled"; fillcolor="#f6f8fb"; color="#dfe4ec"; fontsize=13;
+    camara [label="📷 Cámara", fillcolor="#fff7ed"];
+    gps    [label="📍 GPS del dispositivo", fillcolor="#fff7ed"];
+    subgraph cluster_front {
+      label="Frontend · HTML + CSS + JavaScript (navegador)"; style="rounded,filled"; fillcolor="#e6eef9"; color="#1b4380";
+      paginas [label="Páginas\nindex · dashboard · escanear · vehículos\nalmacenes · movimientos · trazabilidad · usuarios"];
+      appjs   [label="js/app.js\nsesión, roles, mapas, GPS,\nNominatim (caché + 1 req/s)"];
+      libs    [label="Librerías (CDN)\nQRCode.js · html5-qrcode\nLeaflet · supabase-js", fillcolor="#f1f5f9"];
+    }
+  }
+
+  ghpages [label="GitHub Pages\n(hosting estático con HTTPS)", fillcolor="#f1f5f9"];
+
+  subgraph cluster_supabase {
+    label="Supabase (backend gestionado)"; style="rounded,filled"; fillcolor="#ecfdf5"; color="#16a34a"; fontsize=13;
+    auth  [label="Supabase Auth\n(correo + contraseña, JWT)"];
+    api   [label="API REST (PostgREST)"];
+    subgraph cluster_pg {
+      label="PostgreSQL"; style="rounded,filled"; fillcolor="#ffffff"; color="#16a34a";
+      rls   [label="Políticas RLS\nadmin / operador", fillcolor="#fef9c3"];
+      rpc   [label="registrar_movimiento()\n• geocerca y precisión\n• antiduplicados\n• hora del servidor\n• operador de la sesión", fillcolor="#dcfce7"];
+      tablas [label="Tablas: perfiles · vehiculos · almacenes\nmovimientos · escaneos_rechazados · parametros\nVistas: v_movimientos · v_ultimo_punto"];
+    }
+  }
+
+  subgraph cluster_ext {
+    label="Servicios externos (OpenStreetMap)"; style="rounded,filled"; fillcolor="#fff7ed"; color="#f28c28"; fontsize=13;
+    nominatim [label="Nominatim\ncoordenadas → dirección"];
+    tiles     [label="Teselas de mapa OSM\n(fondo de Leaflet)"];
+  }
+
+  ghpages -> paginas [label="descarga HTML/CSS/JS"];
+  camara -> libs [label="lee QR"];
+  gps -> appjs [label="Geolocation API\n(lat, lng, precisión)"];
+  paginas -> appjs;
+  appjs -> auth [label="inicio de sesión"];
+  appjs -> api  [label="consultas CRUD\n+ RPC (con JWT)"];
+  api -> rls; rls -> tablas; api -> rpc; rpc -> tablas;
+  auth -> tablas [label="trigger crea perfil", style=dashed];
+  appjs -> nominatim [label="reverse / search"];
+  libs -> tiles [label="Leaflet"];
+}

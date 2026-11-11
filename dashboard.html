@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="app-header"></header>
+  <main>
+    <div class="contenedor">
+      <div class="cabecera-pagina">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="muted">Resumen de vehículos, almacenes y movimientos.</p>
+        </div>
+        <div class="acciones">
+          <button class="btn secundario" id="btn-actualizar">🔄 Actualizar</button>
+          <a class="btn naranja" href="escanear.html">📷 Registrar llegada / salida</a>
+        </div>
+      </div>
+
+      <div class="kpis" id="kpis">
+        <div class="kpi"><div class="valor" id="k-vehiculos">–</div><div class="etiqueta">Vehículos registrados</div></div>
+        <div class="kpi naranja"><div class="valor" id="k-ruta">–</div><div class="etiqueta">En ruta</div></div>
+        <div class="kpi verde"><div class="valor" id="k-disponibles">–</div><div class="etiqueta">Disponibles (en almacén)</div></div>
+        <div class="kpi amarillo"><div class="valor" id="k-fuera">–</div><div class="etiqueta">Mantenimiento / inactivos</div></div>
+        <div class="kpi"><div class="valor" id="k-almacenes">–</div><div class="etiqueta">Almacenes activos</div></div>
+        <div class="kpi verde"><div class="valor" id="k-hoy">–</div><div class="etiqueta">Movimientos de hoy</div></div>
+        <div class="kpi rojo" data-solo-admin><div class="valor" id="k-rechazos">–</div><div class="etiqueta">Intentos rechazados hoy</div></div>
+      </div>
+
+      <div class="grid grid-2-1">
+        <section class="tarjeta">
+          <div class="tarjeta-titulo">
+            <h2>📍 Último punto de control por vehículo</h2>
+          </div>
+          <div class="aviso info small">Los marcadores 🚚 muestran el <b>último punto de control registrado</b> al escanear el QR, <b>no</b> la posición del vehículo en tiempo real.</div>
+          <div id="mapa" class="mapa"></div>
+        </section>
+
+        <section class="tarjeta">
+          <div class="tarjeta-titulo">
+            <h2>🕒 Movimientos recientes</h2>
+            <a href="movimientos.html" class="small">Ver todos →</a>
+          </div>
+          <ul class="linea-tiempo" id="recientes"><li class="muted">Cargando...</li></ul>
+        </section>
+      </div>
+
+      <section class="tarjeta">
+        <div class="tarjeta-titulo">
+          <h2>🚚 Estado de la flota</h2>
+          <input id="buscar" type="search" placeholder="Buscar placa..." style="max-width:220px">
+        </div>
+        <div class="tabla-wrap">
+          <table>
+            <thead><tr><th>Placa</th><th>Vehículo</th><th>Estado</th><th>Último punto de control</th><th>Movimiento</th><th>Fecha (servidor)</th><th></th></tr></thead>
+            <tbody id="tabla-flota"><tr><td colspan="7" class="vacio">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/dashboard.js"></script>
+</body>
+</html>

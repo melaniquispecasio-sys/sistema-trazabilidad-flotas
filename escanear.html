@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escanear vehículo · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="app-header"></header>
+  <main>
+    <div class="contenedor" style="max-width:860px">
+      <div class="cabecera-pagina">
+        <div>
+          <h1>📷 Registrar llegada / salida</h1>
+          <p class="muted">Escanee el QR del vehículo, obtenga su ubicación y registre el movimiento.</p>
+        </div>
+      </div>
+
+      <div class="pasos">
+        <!-- PASO 1: QR -->
+        <section class="paso actual" id="paso-1">
+          <div class="paso-cabecera"><span class="paso-num">1</span><h2>Escanear el QR del vehículo</h2></div>
+          <div class="paso-cuerpo">
+            <div id="zona-escaner">
+              <div class="acciones" style="justify-content:center;margin-bottom:.8rem">
+                <button class="btn grande naranja" id="btn-camara">📷 Activar cámara</button>
+                <button class="btn grande secundario oculto" id="btn-detener">⏹ Detener</button>
+                <label class="btn grande secundario" style="margin:0" for="archivo-qr">🖼️ Desde imagen</label>
+                <input type="file" id="archivo-qr" accept="image/*" class="oculto">
+              </div>
+              <div id="lector"></div>
+              <p class="muted small centrado" id="ayuda-camara">Apunte la cámara trasera al código QR pegado en el vehículo.</p>
+            </div>
+            <div id="info-vehiculo" class="oculto"></div>
+          </div>
+        </section>
+
+        <!-- PASO 2: GPS -->
+        <section class="paso bloqueado" id="paso-2">
+          <div class="paso-cabecera"><span class="paso-num">2</span><h2>Ubicación del dispositivo (GPS)</h2></div>
+          <div class="paso-cuerpo">
+            <div class="aviso advertencia small">⚠️ El GPS identifica la ubicación del <b>dispositivo que escanea</b>, no prueba la ubicación física del vehículo.</div>
+            <div class="acciones" style="margin:.6rem 0">
+              <button class="btn" id="btn-gps">📍 Obtener ubicación</button>
+              <span class="muted small" id="estado-gps" style="align-self:center"></span>
+            </div>
+            <div class="dato-grid" id="datos-gps"></div>
+            <div id="mapa" class="mapa chico oculto" style="margin-top:.8rem"></div>
+          </div>
+        </section>
+
+        <!-- PASO 3: Almacén, geocerca y tipo -->
+        <section class="paso bloqueado" id="paso-3">
+          <div class="paso-cabecera"><span class="paso-num">3</span><h2>Almacén, geocerca y tipo de movimiento</h2></div>
+          <div class="paso-cuerpo">
+            <div style="margin-bottom:.8rem">
+              <label for="sel-almacen">Almacén</label>
+              <select id="sel-almacen"></select>
+            </div>
+            <div id="geocerca"></div>
+            <label style="margin-top:.8rem">Tipo de movimiento</label>
+            <div class="tipo-selector">
+              <input type="radio" name="tipo" id="tipo-entrada" value="entrada"><label class="entrada" for="tipo-entrada">⬇️ <b>ENTRADA</b><br><span class="small muted">Llegada al almacén</span></label>
+              <input type="radio" name="tipo" id="tipo-salida" value="salida"><label class="salida" for="tipo-salida">⬆️ <b>SALIDA</b><br><span class="small muted">Partida del almacén</span></label>
+            </div>
+            <div id="sugerencia" class="small muted" style="margin-top:.4rem"></div>
+            <div style="margin-top:.8rem">
+              <label for="observacion">Observación (opcional)</label>
+              <input id="observacion" maxlength="300" placeholder="Ej.: llegó con 20 cajas">
+            </div>
+            <button class="btn grande verde bloque" id="btn-registrar" style="margin-top:1rem">✅ Registrar movimiento</button>
+          </div>
+        </section>
+
+        <!-- PASO 4: Resultado -->
+        <section class="paso oculto" id="paso-4">
+          <div class="paso-cabecera"><span class="paso-num">4</span><h2>Resultado</h2></div>
+          <div class="paso-cuerpo" id="resultado"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/escanear.js"></script>
+</body>
+</html>

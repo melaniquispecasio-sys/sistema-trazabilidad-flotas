@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usuarios · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="app-header"></header>
+  <main>
+    <div class="contenedor">
+      <div class="cabecera-pagina">
+        <div>
+          <h1>👥 Usuarios y roles</h1>
+          <p class="muted">Solo administradores. Asigne el rol de cada usuario o desactívelo.</p>
+        </div>
+      </div>
+      <div class="aviso info small">
+        Los nuevos usuarios se crean desde <b>"Crear cuenta"</b> en la pantalla de inicio (o en Supabase → Authentication → Add user).
+        Todos empiezan como <b>operador</b>.
+        <br><b>Administrador:</b> gestiona vehículos, almacenes, parámetros y usuarios.
+        <b>Operador:</b> escanea QR y registra entradas/salidas; consulta información.
+      </div>
+      <section class="tarjeta">
+        <div class="tabla-wrap">
+          <table>
+            <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Registrado</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla"><tr><td colspan="6" class="vacio">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/usuarios.js"></script>
+</body>
+</html>

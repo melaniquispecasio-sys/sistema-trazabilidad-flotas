@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vehículos · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="app-header"></header>
+  <main>
+    <div class="contenedor">
+      <div class="cabecera-pagina">
+        <div>
+          <h1>🚚 Vehículos</h1>
+          <p class="muted">Registro de la flota y su código QR único.</p>
+        </div>
+        <div class="acciones" data-solo-admin>
+          <button class="btn secundario" id="btn-imprimir-todos">🖨️ Imprimir todos los QR</button>
+          <button class="btn naranja" id="btn-nuevo">＋ Nuevo vehículo</button>
+        </div>
+      </div>
+
+      <section class="tarjeta">
+        <div class="filtros" style="margin-bottom:.9rem">
+          <div>
+            <label for="f-buscar">Buscar</label>
+            <input id="f-buscar" type="search" placeholder="Placa, marca o modelo">
+          </div>
+          <div>
+            <label for="f-estado">Estado</label>
+            <select id="f-estado">
+              <option value="">Todos</option>
+              <option value="disponible">Disponible</option>
+              <option value="en_ruta">En ruta</option>
+              <option value="mantenimiento">Mantenimiento</option>
+              <option value="inactivo">Inactivo</option>
+            </select>
+          </div>
+          <div class="muted small" id="contador"></div>
+        </div>
+        <div class="tabla-wrap">
+          <table>
+            <thead><tr><th>Placa</th><th>Marca</th><th>Modelo</th><th>Año</th><th>Estado</th><th>Registrado</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla"><tr><td colspan="7" class="vacio">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/vehiculos.js"></script>
+</body>
+</html>

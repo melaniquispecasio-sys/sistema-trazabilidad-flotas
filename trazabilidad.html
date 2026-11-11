@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trazabilidad · Trazabilidad de Flotas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="app-header"></header>
+  <main>
+    <div class="contenedor">
+      <div class="cabecera-pagina">
+        <div>
+          <h1>📍 Trazabilidad por vehículo</h1>
+          <p class="muted">Secuencia de puntos de control registrados (no es GPS en tiempo real).</p>
+        </div>
+        <div style="min-width:260px">
+          <label for="sel-vehiculo">Vehículo</label>
+          <select id="sel-vehiculo"><option value="">Seleccione un vehículo...</option></select>
+        </div>
+      </div>
+
+      <div id="contenido" class="oculto">
+        <section class="tarjeta" id="resumen"></section>
+        <div class="grid grid-2-1">
+          <section class="tarjeta">
+            <h2>Recorrido entre puntos de control</h2>
+            <div class="aviso info small">Las líneas unen los puntos de control en orden cronológico; no representan la ruta real recorrida.</div>
+            <div id="mapa" class="mapa"></div>
+          </section>
+          <section class="tarjeta">
+            <div class="tarjeta-titulo">
+              <h2>Historial</h2>
+              <a class="small" id="link-movs" href="movimientos.html">Ver en tabla →</a>
+            </div>
+            <ul class="linea-tiempo" id="linea"></ul>
+          </section>
+        </div>
+      </div>
+      <div id="vacio" class="aviso info">Seleccione un vehículo para ver su último punto de control y su historial.</div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/paginas/trazabilidad.js"></script>
+</body>
+</html>
